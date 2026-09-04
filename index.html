@@ -21,10 +21,28 @@
   <meta name="twitter:description" content="Something is coming.">
   <meta name="twitter:image" content="https://velantica.com/og.png">
 
+  <link rel="preload" href="fonts/inter-latin-300-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="canonical" href="https://velantica.com/">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
   <style>
+    @font-face {
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 300;
+      font-display: swap;
+      src: url("fonts/inter-latin-300-normal.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url("fonts/inter-latin-400-normal.woff2") format("woff2");
+    }
+
     :root {
       --bg: #000000;
       --ink: #f5f7f6;
@@ -34,7 +52,15 @@
       --mint: 61, 217, 158;       /* #3DD99E */
       --mx: 50%;
       --my: 50%;
-      --font: -apple-system, "SF Pro Display", "SF Pro Text", Inter, "Segoe UI", Roboto, system-ui, sans-serif;
+      --font: "Inter", -apple-system, "SF Pro Display", "Segoe UI", Roboto, system-ui, sans-serif;
+    }
+
+    @supports (color: color(display-p3 0 1 0)) {
+      :root {
+        --emerald: 20, 190, 135;
+        --teal: 24, 188, 172;
+        --mint: 70, 222, 165;
+      }
     }
 
     * { box-sizing: border-box; }
@@ -89,23 +115,15 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: clamp(1.1rem, 2.4vw, 1.75rem);
-      padding: 2rem;
+      gap: clamp(1rem, 2vw, 2.25rem);
+      padding: max(2rem, env(safe-area-inset-top)) max(2rem, env(safe-area-inset-right)) max(2rem, env(safe-area-inset-bottom)) max(2rem, env(safe-area-inset-left));
       text-align: center;
-    }
-
-    .mark {
-      width: clamp(52px, 5.5vw, 68px);
-      height: auto;
-      filter: drop-shadow(0 0 10px rgba(7, 185, 130, 0.35));
-      opacity: 0;
-      animation: rise 1.4s cubic-bezier(.2,.7,.2,1) 0.1s forwards;
     }
 
     h1 {
       margin: 0;
       font-weight: 300;
-      font-size: clamp(1.35rem, 4.2vw, 2.9rem);
+      font-size: clamp(1.4rem, 5vw, 5.5rem);
       letter-spacing: 0.42em;
       text-indent: 0.42em; /* balances the trailing letter-space */
       text-transform: uppercase;
@@ -117,7 +135,7 @@
 
     p {
       margin: 0;
-      font-size: clamp(0.92rem, 1.4vw, 1.08rem);
+      font-size: clamp(0.95rem, 1.3vw, 1.5rem);
       font-weight: 400;
       letter-spacing: 0.02em;
       color: var(--ink-muted);
@@ -137,7 +155,7 @@
 
     @media (prefers-reduced-motion: reduce) {
       .field { animation: none; }
-      .mark, h1, p { animation: none; opacity: 1; transform: none; }
+      h1, p { animation: none; opacity: 1; transform: none; }
     }
 
     @media (max-width: 480px) {
@@ -150,23 +168,6 @@
   <div class="grain" aria-hidden="true"></div>
 
   <main>
-    <svg class="mark" viewBox="0 0 60 48" aria-hidden="true" focusable="false" fill="none" stroke="url(#mk)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <defs>
-        <linearGradient id="mk" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="#3DD99E"/>
-          <stop offset="1" stop-color="#07B982"/>
-        </linearGradient>
-      </defs>
-      <!-- sail: mast and curved leech -->
-      <path d="M30 5V29M30 5c6 4 12 13 15 24"/>
-      <!-- foot of the sail carries the heartbeat -->
-      <path d="M30 29h2l3-7 3 10 2.5-3H45"/>
-      <!-- hull: a wave through three points -->
-      <path d="M10 38c6-3 12 3 20 0s14-3 20 0"/>
-      <circle cx="10" cy="38" r="1.5" fill="#3DD99E" stroke="none"/>
-      <circle cx="30" cy="38" r="1.5" fill="#3DD99E" stroke="none"/>
-      <circle cx="50" cy="38" r="1.5" fill="#3DD99E" stroke="none"/>
-    </svg>
     <h1>Velantica</h1>
     <p>Something is coming.</p>
   </main>
