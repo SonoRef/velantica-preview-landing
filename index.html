@@ -186,20 +186,21 @@
 
     /* Monitor sweep: a short bright segment travels along the ECG path.
        Over the flat parts it only brightens the baseline; across the complex it draws the beat.
-       dasharray = visible segment + gap (pathLength 100); offset runs 30 -> -100 so the segment
-       enters from the left and leaves at the right. */
+       dasharray = segment + a gap longer than the path (pathLength 100); offset runs 32 -> -132 so the
+       single segment enters fully from the left and leaves fully at the right, no caps at the ends. */
     .rule-beat {
       stroke: #BFF5DC;
-      stroke-dasharray: 30 100;
-      stroke-dashoffset: 30;
+      stroke-linecap: butt;
+      stroke-dasharray: 30 300;   /* gap longer than the path: only one segment ever exists */
+      stroke-dashoffset: 32;      /* segment parked fully left of the path */
       filter: drop-shadow(0 0 2.5px rgba(var(--mint), 0.9));
       animation: sweep 6s linear 4s infinite;
     }
 
     @keyframes sweep {
-      0%    { stroke-dashoffset: 30; }
-      22%   { stroke-dashoffset: -100; }
-      100%  { stroke-dashoffset: -100; }
+      0%    { stroke-dashoffset: 32; }
+      27%   { stroke-dashoffset: -132; }
+      100%  { stroke-dashoffset: -132; }
     }
 
     @keyframes draw {
@@ -226,7 +227,7 @@
       .field, main { animation: none; }
       .field { opacity: 1; }
       h1, p, .rule { animation: none; opacity: 1; transform: none; }
-      .rule-beat { animation: none; stroke-dashoffset: -100; }
+      .rule-beat { animation: none; stroke-dashoffset: -132; }
     }
 
     @media (max-width: 480px) {
@@ -280,11 +281,11 @@
       var beat = document.querySelector('.rule-beat');
       if (!beat || !beat.animate) return;
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      var PERIOD = 6000, JITTER = 350, SWEEP = 1300, FIRST = 4000;
+      var PERIOD = 6000, JITTER = 350, SWEEP = 1640, FIRST = 4000;
       beat.style.animation = 'none';
       function fire() {
         beat.animate(
-          [{ strokeDashoffset: 30 }, { strokeDashoffset: -100 }],
+          [{ strokeDashoffset: 32 }, { strokeDashoffset: -132 }],
           { duration: SWEEP, easing: 'linear', fill: 'forwards' }
         );
         setTimeout(fire, PERIOD + (Math.random() * 2 - 1) * JITTER);
