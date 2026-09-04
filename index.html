@@ -4,22 +4,22 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Velantica</title>
-  <meta name="description" content="Velantica. Something is coming.">
+  <meta name="description" content="Velantica. Setting sail.">
   <meta name="color-scheme" content="dark">
   <meta name="theme-color" content="#000000">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Velantica">
   <meta property="og:title" content="Velantica">
-  <meta property="og:description" content="Something is coming.">
+  <meta property="og:description" content="Setting sail.">
   <meta property="og:url" content="https://velantica.com/">
-  <meta property="og:image" content="https://velantica.com/og.png">
+  <meta property="og:image" content="https://velantica.com/og.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Velantica">
-  <meta name="twitter:description" content="Something is coming.">
-  <meta name="twitter:image" content="https://velantica.com/og.png">
+  <meta name="twitter:description" content="Setting sail.">
+  <meta name="twitter:image" content="https://velantica.com/og.jpg">
 
   <link rel="preload" href="fonts/inter-latin-300-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
@@ -32,14 +32,14 @@
       font-family: "Inter";
       font-style: normal;
       font-weight: 300;
-      font-display: swap;
+      font-display: block;
       src: url("fonts/inter-latin-300-normal.woff2") format("woff2");
     }
     @font-face {
       font-family: "Inter";
       font-style: normal;
       font-weight: 400;
-      font-display: swap;
+      font-display: block;
       src: url("fonts/inter-latin-400-normal.woff2") format("woff2");
     }
 
@@ -71,7 +71,6 @@
       font-family: var(--font);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      overflow: hidden;
     }
 
     body {
@@ -83,17 +82,24 @@
       isolation: isolate;
     }
 
-    /* Light field */
+    /* One light source behind the wordmark, slowly approaching */
     .field {
       position: fixed;
-      inset: -20%;
+      inset: -25%;
       z-index: -2;
       pointer-events: none;
       background:
-        radial-gradient(70% 60% at 12% 8%,  rgba(var(--emerald), 0.34) 0%, rgba(var(--emerald), 0.22) 18%, rgba(var(--emerald), 0.13) 35%, rgba(var(--emerald), 0.06) 50%, rgba(var(--emerald), 0.02) 62%, rgba(var(--emerald), 0) 72%),
-        radial-gradient(75% 65% at 92% 96%, rgba(var(--teal), 0.30) 0%, rgba(var(--teal), 0.19) 20%, rgba(var(--teal), 0.11) 38%, rgba(var(--teal), 0.05) 52%, rgba(var(--teal), 0.018) 64%, rgba(var(--teal), 0) 74%),
-        radial-gradient(120% 90% at 50% 120%, #030807 0%, #000 60%);
-      animation: breathe 16s ease-in-out infinite alternate;
+        radial-gradient(52vmax 40vmax at 50% 47%,
+          rgba(var(--emerald), 0.30) 0%,
+          rgba(var(--emerald), 0.22) 14%,
+          rgba(var(--emerald), 0.14) 28%,
+          rgba(var(--emerald), 0.08) 42%,
+          rgba(var(--emerald), 0.035) 56%,
+          rgba(var(--emerald), 0.01) 70%,
+          rgba(var(--emerald), 0) 82%),
+        #000;
+      transform-origin: 50% 47%;
+      animation: approach 26s cubic-bezier(.45,0,.55,1) infinite alternate;
       will-change: transform, opacity;
     }
 
@@ -102,13 +108,13 @@
       position: fixed;
       top: 0;
       left: 0;
-      width: 120vmax;
-      height: 120vmax;
-      margin: -60vmax 0 0 -60vmax;
+      width: 100vmax;
+      height: 100vmax;
+      margin: -50vmax 0 0 -50vmax;
       z-index: -2;
       pointer-events: none;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(var(--mint), 0.06) 0%, rgba(var(--mint), 0.045) 15%, rgba(var(--mint), 0.028) 30%, rgba(var(--mint), 0.014) 42%, rgba(var(--mint), 0.005) 52%, rgba(var(--mint), 0) 60%);
+      background: radial-gradient(circle, rgba(var(--teal), 0.05) 0%, rgba(var(--teal), 0.035) 15%, rgba(var(--teal), 0.02) 30%, rgba(var(--teal), 0.01) 42%, rgba(var(--teal), 0.004) 52%, rgba(var(--teal), 0) 60%);
       transform: translate3d(50vw, 50vh, 0);
       will-change: transform;
     }
@@ -131,6 +137,9 @@
       gap: clamp(1rem, 2vw, 2.25rem);
       padding: max(2rem, env(safe-area-inset-top)) max(2rem, env(safe-area-inset-right)) max(2rem, env(safe-area-inset-bottom)) max(2rem, env(safe-area-inset-left));
       text-align: center;
+      transform: translateY(-3vh);
+      animation: nearer 26s cubic-bezier(.45,0,.55,1) infinite alternate;
+      will-change: transform;
     }
 
     h1 {
@@ -161,13 +170,19 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    @keyframes breathe {
-      from { transform: scale(1)    translate(0, 0);   opacity: 0.92; }
-      to   { transform: scale(1.06) translate(1%, -1%); opacity: 1; }
+    @keyframes approach {
+      from { transform: scale(1);    opacity: 0.82; }
+      to   { transform: scale(1.18); opacity: 1; }
+    }
+
+    @keyframes nearer {
+      from { transform: translateY(-3vh) scale(1); }
+      to   { transform: translateY(-3vh) scale(1.02); }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .field { animation: none; }
+      .field, main { animation: none; }
+      .field { opacity: 1; }
       h1, p { animation: none; opacity: 1; transform: none; }
     }
 
@@ -183,7 +198,7 @@
 
   <main>
     <h1>Velantica</h1>
-    <p>Something is coming.</p>
+    <p>Setting sail.</p>
   </main>
 
   <script>
