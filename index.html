@@ -273,6 +273,24 @@
         if (!raf) { tx = cx = innerWidth / 2; ty = cy = innerHeight / 2; spot.style.transform = ''; }
       });
     })();
+
+    // Heart-rate variability: with JS the beat is scheduled with a little scatter
+    // around the period instead of the perfectly regular CSS loop (which stays as the no-JS fallback).
+    (function () {
+      var beat = document.querySelector('.rule-beat');
+      if (!beat || !beat.animate) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var PERIOD = 6000, JITTER = 350, SWEEP = 1300, FIRST = 4000;
+      beat.style.animation = 'none';
+      function fire() {
+        beat.animate(
+          [{ strokeDashoffset: 30 }, { strokeDashoffset: -100 }],
+          { duration: SWEEP, easing: 'linear', fill: 'forwards' }
+        );
+        setTimeout(fire, PERIOD + (Math.random() * 2 - 1) * JITTER);
+      }
+      setTimeout(fire, FIRST);
+    })();
   </script>
 </body>
 </html>
