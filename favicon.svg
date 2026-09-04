@@ -1,7 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <!-- Placeholder mark. Geometry mirrors vlts-platform/packages/ui/tokens/mark.json (32 grid). -->
-  <rect width="32" height="32" fill="#000000"/>
-  <rect x="7" y="7" width="7" height="7" fill="#07B982"/>
-  <rect x="7" y="19" width="18" height="3" fill="#FFFFFF"/>
-  <rect x="7" y="25" width="12" height="3" fill="rgba(255,255,255,0.7)"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Velantica mark: sail with heartbeat foot over a wave through three points. -->
+  <rect width="64" height="64" fill="#000000"/>
+  <g transform="translate(2 8)" fill="none" stroke="#1FCB94" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M30 5V29M30 5c6 4 12 13 15 24"/>
+    <path d="M30 29h2l3-7 3 10 2.5-3H45"/>
+    <path d="M10 38c6-3 12 3 20 0s14-3 20 0"/>
+    <circle cx="10" cy="38" r="2.2" fill="#3DD99E" stroke="none"/>
+    <circle cx="30" cy="38" r="2.2" fill="#3DD99E" stroke="none"/>
+    <circle cx="50" cy="38" r="2.2" fill="#3DD99E" stroke="none"/>
+  </g>
 </svg>
