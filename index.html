@@ -102,13 +102,13 @@
       position: fixed;
       top: 0;
       left: 0;
-      width: 90vmax;
-      height: 90vmax;
-      margin: -45vmax 0 0 -45vmax;
+      width: 120vmax;
+      height: 120vmax;
+      margin: -60vmax 0 0 -60vmax;
       z-index: -2;
       pointer-events: none;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(var(--mint), 0.13) 0%, rgba(var(--mint), 0.05) 30%, rgba(var(--mint), 0) 62%);
+      background: radial-gradient(circle, rgba(var(--mint), 0.06) 0%, rgba(var(--mint), 0.025) 30%, rgba(var(--mint), 0) 60%);
       transform: translate3d(50vw, 50vh, 0);
       will-change: transform;
     }
@@ -187,21 +187,23 @@
   </main>
 
   <script>
-    // Optional: the centre light drifts toward the pointer. Page is identical without JS.
+    // Optional parallax: the centre light drifts a fraction of the pointer offset, slowly. Page is identical without JS.
     (function () {
       if (!window.matchMedia('(pointer: fine)').matches) return;
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       var spot = document.querySelector('.spot');
       if (!spot) return;
+      var DRIFT = 0.12, EASE = 0.035;
       var tx = innerWidth / 2, ty = innerHeight / 2, cx = tx, cy = ty, raf = 0;
       function tick() {
-        cx += (tx - cx) * 0.16;
-        cy += (ty - cy) * 0.16;
+        cx += (tx - cx) * EASE;
+        cy += (ty - cy) * EASE;
         spot.style.transform = 'translate3d(' + cx.toFixed(1) + 'px,' + cy.toFixed(1) + 'px,0)';
         raf = (Math.abs(tx - cx) > 0.2 || Math.abs(ty - cy) > 0.2) ? requestAnimationFrame(tick) : 0;
       }
       addEventListener('pointermove', function (e) {
-        tx = e.clientX; ty = e.clientY;
+        tx = innerWidth / 2 + (e.clientX - innerWidth / 2) * DRIFT;
+        ty = innerHeight / 2 + (e.clientY - innerHeight / 2) * DRIFT;
         if (!raf) raf = requestAnimationFrame(tick);
       }, { passive: true });
       addEventListener('resize', function () {
