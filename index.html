@@ -50,8 +50,6 @@
       --emerald: 7, 185, 130;     /* #07B982 */
       --teal: 20, 184, 166;       /* #14B8A6 */
       --mint: 61, 217, 158;       /* #3DD99E */
-      --mx: 50%;
-      --my: 50%;
       --font: "Inter", -apple-system, "SF Pro Display", "Segoe UI", Roboto, system-ui, sans-serif;
     }
 
@@ -92,12 +90,27 @@
       z-index: -2;
       pointer-events: none;
       background:
-        radial-gradient(60% 55% at var(--mx) var(--my), rgba(var(--mint), 0.12) 0%, rgba(var(--mint), 0) 70%),
         radial-gradient(70% 60% at 12% 8%,  rgba(var(--emerald), 0.34) 0%, rgba(var(--emerald), 0.13) 35%, rgba(var(--emerald), 0) 72%),
         radial-gradient(75% 65% at 92% 96%, rgba(var(--teal), 0.30) 0%, rgba(var(--teal), 0.11) 38%, rgba(var(--teal), 0) 74%),
         radial-gradient(120% 90% at 50% 120%, #030807 0%, #000 60%);
       animation: breathe 16s ease-in-out infinite alternate;
       will-change: transform, opacity;
+    }
+
+    /* Pointer-following light, moved by transform only (compositor, no repaint) */
+    .spot {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 90vmax;
+      height: 90vmax;
+      margin: -45vmax 0 0 -45vmax;
+      z-index: -2;
+      pointer-events: none;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(var(--mint), 0.13) 0%, rgba(var(--mint), 0.05) 30%, rgba(var(--mint), 0) 62%);
+      transform: translate3d(50vw, 50vh, 0);
+      will-change: transform;
     }
 
     /* Fine grain against banding */
@@ -165,6 +178,7 @@
 </head>
 <body>
   <div class="field" aria-hidden="true"></div>
+  <div class="spot" aria-hidden="true"></div>
   <div class="grain" aria-hidden="true"></div>
 
   <main>
@@ -173,23 +187,26 @@
   </main>
 
   <script>
-    // Optional: let the centre glow drift toward the pointer. Page is identical without JS.
+    // Optional: the centre light drifts toward the pointer. Page is identical without JS.
     (function () {
       if (!window.matchMedia('(pointer: fine)').matches) return;
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      var root = document.documentElement, tx = 50, ty = 50, cx = 50, cy = 50, raf = 0;
+      var spot = document.querySelector('.spot');
+      if (!spot) return;
+      var tx = innerWidth / 2, ty = innerHeight / 2, cx = tx, cy = ty, raf = 0;
       function tick() {
-        cx += (tx - cx) * 0.06;
-        cy += (ty - cy) * 0.06;
-        root.style.setProperty('--mx', cx.toFixed(2) + '%');
-        root.style.setProperty('--my', cy.toFixed(2) + '%');
-        raf = (Math.abs(tx - cx) > 0.05 || Math.abs(ty - cy) > 0.05) ? requestAnimationFrame(tick) : 0;
+        cx += (tx - cx) * 0.16;
+        cy += (ty - cy) * 0.16;
+        spot.style.transform = 'translate3d(' + cx.toFixed(1) + 'px,' + cy.toFixed(1) + 'px,0)';
+        raf = (Math.abs(tx - cx) > 0.2 || Math.abs(ty - cy) > 0.2) ? requestAnimationFrame(tick) : 0;
       }
-      window.addEventListener('pointermove', function (e) {
-        tx = (e.clientX / window.innerWidth) * 100;
-        ty = (e.clientY / window.innerHeight) * 100;
+      addEventListener('pointermove', function (e) {
+        tx = e.clientX; ty = e.clientY;
         if (!raf) raf = requestAnimationFrame(tick);
       }, { passive: true });
+      addEventListener('resize', function () {
+        if (!raf) { tx = cx = innerWidth / 2; ty = cy = innerHeight / 2; spot.style.transform = ''; }
+      });
     })();
   </script>
 </body>
